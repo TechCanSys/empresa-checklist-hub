@@ -31,7 +31,7 @@ export function emptyChecklistData(profile?: {
     data: "",
     dataAprovacao: "",
   };
-  if (profile?.logo_url) data.__logo = profile.logo_url;
+  if (profile?.logo_url) data["__logo"] = profile.logo_url;
   return data;
 }
 
