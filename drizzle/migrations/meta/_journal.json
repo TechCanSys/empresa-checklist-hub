@@ -1,5 +1,13 @@
 {
   "version": "7",
   "dialect": "postgresql",
-  "entries": []
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1792871869375,
+      "tag": "0000_criar_perfis_tipos_de_conta_e_checklists",
+      "breakpoints": true
+    }
+  ]
 }
