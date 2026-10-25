@@ -123,7 +123,7 @@ function NovoChecklist() {
           </button>
         </div>
 
-        {meQuery.isLoading || !data ? (
+        {meQuery.isLoading || !data || !meQuery.data ? (
           <div className="mt-20 flex justify-center">
             <Loader2 className="h-8 w-8 animate-spin text-primary" />
           </div>
