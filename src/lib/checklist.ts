@@ -19,6 +19,22 @@ export const ITENS_TECNICOS = [
 
 export const NUM_INTERVENCOES = 4;
 
+export const STATUS_LABELS: Record<string, string> = {
+  pleno: "Em pleno funcionamento",
+  ressalvas: "Com ressalvas",
+  corretiva: "Corretiva necessária",
+  parado: "Sistema parado",
+  pendente: "Pendente",
+};
+
+export function deriveStatus(data: ChecklistData): string {
+  if (data["estadoParado"] === true) return "parado";
+  if (data["estadoCorretiva"] === true) return "corretiva";
+  if (data["estadoRessalvas"] === true) return "ressalvas";
+  if (data["estadoPleno"] === true) return "pleno";
+  return "pendente";
+}
+
 export function emptyChecklistData(profile?: {
   company_name?: string | null;
   phone?: string | null;

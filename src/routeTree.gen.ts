@@ -12,7 +12,10 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedEmpresaRouteImport } from './routes/_authenticated/empresa'
 import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated/home'
+import { Route as AuthenticatedEmpresaIndexRouteImport } from './routes/_authenticated/empresa.index'
+import { Route as AuthenticatedEmpresaNovoRouteImport } from './routes/_authenticated/empresa.novo'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -28,35 +31,69 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedEmpresaRoute = AuthenticatedEmpresaRouteImport.update({
+  id: '/empresa',
+  path: '/empresa',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedHomeRoute = AuthenticatedHomeRouteImport.update({
   id: '/home',
   path: '/home',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedEmpresaIndexRoute =
+  AuthenticatedEmpresaIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedEmpresaRoute,
+  } as any)
+const AuthenticatedEmpresaNovoRoute =
+  AuthenticatedEmpresaNovoRouteImport.update({
+    id: '/novo',
+    path: '/novo',
+    getParentRoute: () => AuthenticatedEmpresaRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/empresa': typeof AuthenticatedEmpresaRouteWithChildren
   '/home': typeof AuthenticatedHomeRoute
+  '/empresa/novo': typeof AuthenticatedEmpresaNovoRoute
+  '/empresa/': typeof AuthenticatedEmpresaIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/home': typeof AuthenticatedHomeRoute
+  '/empresa/novo': typeof AuthenticatedEmpresaNovoRoute
+  '/empresa': typeof AuthenticatedEmpresaIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/_authenticated/empresa': typeof AuthenticatedEmpresaRouteWithChildren
   '/_authenticated/home': typeof AuthenticatedHomeRoute
+  '/_authenticated/empresa/novo': typeof AuthenticatedEmpresaNovoRoute
+  '/_authenticated/empresa/': typeof AuthenticatedEmpresaIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/home'
+  fullPaths:
+    '/' | '/auth' | '/empresa' | '/home' | '/empresa/novo' | '/empresa/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/home'
-  id: '__root__' | '/' | '/_authenticated' | '/auth' | '/_authenticated/home'
+  to: '/' | '/auth' | '/home' | '/empresa/novo' | '/empresa'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/_authenticated/empresa'
+    | '/_authenticated/home'
+    | '/_authenticated/empresa/novo'
+    | '/_authenticated/empresa/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -88,6 +125,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/empresa': {
+      id: '/_authenticated/empresa'
+      path: '/empresa'
+      fullPath: '/empresa'
+      preLoaderRoute: typeof AuthenticatedEmpresaRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/home': {
       id: '/_authenticated/home'
       path: '/home'
@@ -95,14 +139,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedHomeRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/empresa/': {
+      id: '/_authenticated/empresa/'
+      path: '/'
+      fullPath: '/empresa/'
+      preLoaderRoute: typeof AuthenticatedEmpresaIndexRouteImport
+      parentRoute: typeof AuthenticatedEmpresaRoute
+    }
+    '/_authenticated/empresa/novo': {
+      id: '/_authenticated/empresa/novo'
+      path: '/novo'
+      fullPath: '/empresa/novo'
+      preLoaderRoute: typeof AuthenticatedEmpresaNovoRouteImport
+      parentRoute: typeof AuthenticatedEmpresaRoute
+    }
   }
 }
 
+interface AuthenticatedEmpresaRouteChildren {
+  AuthenticatedEmpresaNovoRoute: typeof AuthenticatedEmpresaNovoRoute
+  AuthenticatedEmpresaIndexRoute: typeof AuthenticatedEmpresaIndexRoute
+}
+
+const AuthenticatedEmpresaRouteChildren: AuthenticatedEmpresaRouteChildren = {
+  AuthenticatedEmpresaNovoRoute: AuthenticatedEmpresaNovoRoute,
+  AuthenticatedEmpresaIndexRoute: AuthenticatedEmpresaIndexRoute,
+}
+
+const AuthenticatedEmpresaRouteWithChildren =
+  AuthenticatedEmpresaRoute._addFileChildren(AuthenticatedEmpresaRouteChildren)
+
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedEmpresaRoute: typeof AuthenticatedEmpresaRouteWithChildren
   AuthenticatedHomeRoute: typeof AuthenticatedHomeRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedEmpresaRoute: AuthenticatedEmpresaRouteWithChildren,
   AuthenticatedHomeRoute: AuthenticatedHomeRoute,
 }
 
