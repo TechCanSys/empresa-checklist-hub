@@ -124,3 +124,22 @@
     linear-gradient(to right, oklch(0.185 0.03 257 / 0%) 0%, oklch(0.185 0.03 257 / 100%) 100%),
     repeating-linear-gradient(to bottom, oklch(1 0 0 / 4%) 0px, oklch(1 0 0 / 4%) 1px, transparent 1px, transparent 36px);
 }
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .print-area,
+  .print-area * {
+    visibility: visible;
+  }
+  .print-area {
+    position: absolute;
+    inset: 0;
+    padding: 0;
+    background: var(--color-paper);
+  }
+  .print-area .shadow-xl {
+    box-shadow: none !important;
+  }
+}
