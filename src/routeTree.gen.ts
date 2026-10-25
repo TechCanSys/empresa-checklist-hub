@@ -12,8 +12,10 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedClienteRouteImport } from './routes/_authenticated/cliente'
 import { Route as AuthenticatedEmpresaRouteImport } from './routes/_authenticated/empresa'
 import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated/home'
+import { Route as AuthenticatedChecklistIdRouteImport } from './routes/_authenticated/checklist.$id'
 import { Route as AuthenticatedEmpresaIndexRouteImport } from './routes/_authenticated/empresa.index'
 import { Route as AuthenticatedEmpresaNovoRouteImport } from './routes/_authenticated/empresa.novo'
 
@@ -31,6 +33,11 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedClienteRoute = AuthenticatedClienteRouteImport.update({
+  id: '/cliente',
+  path: '/cliente',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedEmpresaRoute = AuthenticatedEmpresaRouteImport.update({
   id: '/empresa',
   path: '/empresa',
@@ -41,6 +48,12 @@ const AuthenticatedHomeRoute = AuthenticatedHomeRouteImport.update({
   path: '/home',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedChecklistIdRoute =
+  AuthenticatedChecklistIdRouteImport.update({
+    id: '/checklist/$id',
+    path: '/checklist/$id',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedEmpresaIndexRoute =
   AuthenticatedEmpresaIndexRouteImport.update({
     id: '/',
@@ -57,15 +70,19 @@ const AuthenticatedEmpresaNovoRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/cliente': typeof AuthenticatedClienteRoute
   '/empresa': typeof AuthenticatedEmpresaRouteWithChildren
   '/home': typeof AuthenticatedHomeRoute
+  '/checklist/$id': typeof AuthenticatedChecklistIdRoute
   '/empresa/novo': typeof AuthenticatedEmpresaNovoRoute
   '/empresa/': typeof AuthenticatedEmpresaIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/cliente': typeof AuthenticatedClienteRoute
   '/home': typeof AuthenticatedHomeRoute
+  '/checklist/$id': typeof AuthenticatedChecklistIdRoute
   '/empresa/novo': typeof AuthenticatedEmpresaNovoRoute
   '/empresa': typeof AuthenticatedEmpresaIndexRoute
 }
@@ -74,24 +91,42 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/_authenticated/cliente': typeof AuthenticatedClienteRoute
   '/_authenticated/empresa': typeof AuthenticatedEmpresaRouteWithChildren
   '/_authenticated/home': typeof AuthenticatedHomeRoute
+  '/_authenticated/checklist/$id': typeof AuthenticatedChecklistIdRoute
   '/_authenticated/empresa/novo': typeof AuthenticatedEmpresaNovoRoute
   '/_authenticated/empresa/': typeof AuthenticatedEmpresaIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/auth' | '/empresa' | '/home' | '/empresa/novo' | '/empresa/'
+    | '/'
+    | '/auth'
+    | '/cliente'
+    | '/empresa'
+    | '/home'
+    | '/checklist/$id'
+    | '/empresa/novo'
+    | '/empresa/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/home' | '/empresa/novo' | '/empresa'
+  to:
+    | '/'
+    | '/auth'
+    | '/cliente'
+    | '/home'
+    | '/checklist/$id'
+    | '/empresa/novo'
+    | '/empresa'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/_authenticated/cliente'
     | '/_authenticated/empresa'
     | '/_authenticated/home'
+    | '/_authenticated/checklist/$id'
     | '/_authenticated/empresa/novo'
     | '/_authenticated/empresa/'
   fileRoutesById: FileRoutesById
@@ -125,6 +160,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/cliente': {
+      id: '/_authenticated/cliente'
+      path: '/cliente'
+      fullPath: '/cliente'
+      preLoaderRoute: typeof AuthenticatedClienteRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/empresa': {
       id: '/_authenticated/empresa'
       path: '/empresa'
@@ -137,6 +179,13 @@ declare module '@tanstack/react-router' {
       path: '/home'
       fullPath: '/home'
       preLoaderRoute: typeof AuthenticatedHomeRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/checklist/$id': {
+      id: '/_authenticated/checklist/$id'
+      path: '/checklist/$id'
+      fullPath: '/checklist/$id'
+      preLoaderRoute: typeof AuthenticatedChecklistIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/empresa/': {
@@ -170,13 +219,17 @@ const AuthenticatedEmpresaRouteWithChildren =
   AuthenticatedEmpresaRoute._addFileChildren(AuthenticatedEmpresaRouteChildren)
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedClienteRoute: typeof AuthenticatedClienteRoute
   AuthenticatedEmpresaRoute: typeof AuthenticatedEmpresaRouteWithChildren
   AuthenticatedHomeRoute: typeof AuthenticatedHomeRoute
+  AuthenticatedChecklistIdRoute: typeof AuthenticatedChecklistIdRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedClienteRoute: AuthenticatedClienteRoute,
   AuthenticatedEmpresaRoute: AuthenticatedEmpresaRouteWithChildren,
   AuthenticatedHomeRoute: AuthenticatedHomeRoute,
+  AuthenticatedChecklistIdRoute: AuthenticatedChecklistIdRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
